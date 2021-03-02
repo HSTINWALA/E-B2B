@@ -1,0 +1,451 @@
+/*
+ 2017 Julian Garnier
+ Released under the MIT license
+*/
+var $jscomp$this=this;
+(function(v,p){"function"===typeof define&&define.amd?define([],p):"object"===typeof module&&module.exports?module.exports=p():v.anime=p()})(this,function(){function v(a){if(!g.col(a))try{return document.querySelectorAll(a)}catch(b){}}function p(a){return a.reduce(function(a,d){return a.concat(g.arr(d)?p(d):d)},[])}function w(a){if(g.arr(a))return a;g.str(a)&&(a=v(a)||a);return a instanceof NodeList||a instanceof HTMLCollection?[].slice.call(a):[a]}function F(a,b){return a.some(function(a){return a===b})}
+function A(a){var b={},d;for(d in a)b[d]=a[d];return b}function G(a,b){var d=A(a),c;for(c in a)d[c]=b.hasOwnProperty(c)?b[c]:a[c];return d}function B(a,b){var d=A(a),c;for(c in b)d[c]=g.und(a[c])?b[c]:a[c];return d}function S(a){a=a.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i,function(a,b,d,h){return b+b+d+d+h+h});var b=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(a);a=parseInt(b[1],16);var d=parseInt(b[2],16),b=parseInt(b[3],16);return"rgb("+a+","+d+","+b+")"}function T(a){function b(a,b,c){0>
+c&&(c+=1);1<c&&--c;return c<1/6?a+6*(b-a)*c:.5>c?b:c<2/3?a+(b-a)*(2/3-c)*6:a}var d=/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(a);a=parseInt(d[1])/360;var c=parseInt(d[2])/100,d=parseInt(d[3])/100;if(0==c)c=d=a=d;else{var e=.5>d?d*(1+c):d+c-d*c,l=2*d-e,c=b(l,e,a+1/3),d=b(l,e,a);a=b(l,e,a-1/3)}return"rgb("+255*c+","+255*d+","+255*a+")"}function x(a){if(a=/([\+\-]?[0-9#\.]+)(%|px|pt|em|rem|in|cm|mm|ex|pc|vw|vh|deg|rad|turn)?/.exec(a))return a[2]}function U(a){if(-1<a.indexOf("translate"))return"px";
+if(-1<a.indexOf("rotate")||-1<a.indexOf("skew"))return"deg"}function H(a,b){return g.fnc(a)?a(b.target,b.id,b.total):a}function C(a,b){if(b in a.style)return getComputedStyle(a).getPropertyValue(b.replace(/([a-z])([A-Z])/g,"$1-$2").toLowerCase())||"0"}function I(a,b){if(g.dom(a)&&F(V,b))return"transform";if(g.dom(a)&&(a.getAttribute(b)||g.svg(a)&&a[b]))return"attribute";if(g.dom(a)&&"transform"!==b&&C(a,b))return"css";if(null!=a[b])return"object"}function W(a,b){var d=U(b),d=-1<b.indexOf("scale")?
+1:0+d;a=a.style.transform;if(!a)return d;for(var c=[],e=[],l=[],h=/(\w+)\((.+?)\)/g;c=h.exec(a);)e.push(c[1]),l.push(c[2]);a=l.filter(function(a,c){return e[c]===b});return a.length?a[0]:d}function J(a,b){switch(I(a,b)){case "transform":return W(a,b);case "css":return C(a,b);case "attribute":return a.getAttribute(b)}return a[b]||0}function K(a,b){var d=/^(\*=|\+=|-=)/.exec(a);if(!d)return a;b=parseFloat(b);a=parseFloat(a.replace(d[0],""));switch(d[0][0]){case "+":return b+a;case "-":return b-a;case "*":return b*
+a}}function D(a){return g.obj(a)&&a.hasOwnProperty("totalLength")}function X(a,b){function d(c){c=void 0===c?0:c;return a.el.getPointAtLength(1<=b+c?b+c:0)}var c=d(),e=d(-1),l=d(1);switch(a.property){case "x":return c.x;case "y":return c.y;case "angle":return 180*Math.atan2(l.y-e.y,l.x-e.x)/Math.PI}}function L(a,b){var d=/-?\d*\.?\d+/g;a=D(a)?a.totalLength:a;if(g.col(a))b=g.rgb(a)?a:g.hex(a)?S(a):g.hsl(a)?T(a):void 0;else{var c=x(a);a=c?a.substr(0,a.length-c.length):a;b=b?a+b:a}b+="";return{original:b,
+numbers:b.match(d)?b.match(d).map(Number):[0],strings:b.split(d)}}function Y(a,b){return b.reduce(function(b,c,e){return b+a[e-1]+c})}function M(a){return(a?p(g.arr(a)?a.map(w):w(a)):[]).filter(function(a,d,c){return c.indexOf(a)===d})}function Z(a){var b=M(a);return b.map(function(a,c){return{target:a,id:c,total:b.length}})}function aa(a,b){var d=A(b);if(g.arr(a)){var c=a.length;2!==c||g.obj(a[0])?g.fnc(b.duration)||(d.duration=b.duration/c):a={value:a}}return w(a).map(function(a,c){c=c?0:b.delay;
+a=g.obj(a)&&!D(a)?a:{value:a};g.und(a.delay)&&(a.delay=c);return a}).map(function(a){return B(a,d)})}function ba(a,b){var d={},c;for(c in a){var e=H(a[c],b);g.arr(e)&&(e=e.map(function(a){return H(a,b)}),1===e.length&&(e=e[0]));d[c]=e}d.duration=parseFloat(d.duration);d.delay=parseFloat(d.delay);return d}function ca(a){return g.arr(a)?y.apply(this,a):N[a]}function da(a,b){var d;return a.tweens.map(function(c){c=ba(c,b);var e=c.value,l=J(b.target,a.name),h=d?d.to.original:l,h=g.arr(e)?e[0]:h,m=K(g.arr(e)?
+e[1]:e,h),l=x(m)||x(h)||x(l);c.isPath=D(e);c.from=L(h,l);c.to=L(m,l);c.start=d?d.end:a.offset;c.end=c.start+c.delay+c.duration;c.easing=ca(c.easing);c.elasticity=(1E3-Math.min(Math.max(c.elasticity,1),999))/1E3;g.col(c.from.original)&&(c.round=1);return d=c})}function ea(a,b){return p(a.map(function(a){return b.map(function(b){var c=I(a.target,b.name);if(c){var d=da(b,a);b={type:c,property:b.name,animatable:a,tweens:d,duration:d[d.length-1].end,delay:d[0].delay}}else b=void 0;return b})})).filter(function(a){return!g.und(a)})}
+function O(a,b,d){var c="delay"===a?Math.min:Math.max;return b.length?c.apply(Math,b.map(function(b){return b[a]})):d[a]}function fa(a){var b=G(ga,a),d=G(ha,a),c=Z(a.targets),e=[],g=B(b,d),h;for(h in a)g.hasOwnProperty(h)||"targets"===h||e.push({name:h,offset:g.offset,tweens:aa(a[h],d)});a=ea(c,e);return B(b,{children:[],animatables:c,animations:a,duration:O("duration",a,d),delay:O("delay",a,d)})}function n(a){function b(){return window.Promise&&new Promise(function(a){return Q=a})}function d(a){return f.reversed?
+f.duration-a:a}function c(a){for(var b=0,c={},d=f.animations,e={};b<d.length;){var g=d[b],h=g.animatable,m=g.tweens;e.tween=m.filter(function(b){return a<b.end})[0]||m[m.length-1];e.isPath$1=e.tween.isPath;e.round=e.tween.round;e.eased=e.tween.easing(Math.min(Math.max(a-e.tween.start-e.tween.delay,0),e.tween.duration)/e.tween.duration,e.tween.elasticity);m=Y(e.tween.to.numbers.map(function(a){return function(b,c){c=a.isPath$1?0:a.tween.from.numbers[c];b=c+a.eased*(b-c);a.isPath$1&&(b=X(a.tween.value,
+b));a.round&&(b=Math.round(b*a.round)/a.round);return b}}(e)),e.tween.to.strings);ia[g.type](h.target,g.property,m,c,h.id);g.currentValue=m;b++;e={isPath$1:e.isPath$1,tween:e.tween,eased:e.eased,round:e.round}}if(c)for(var k in c)E||(E=C(document.body,"transform")?"transform":"-webkit-transform"),f.animatables[k].target.style[E]=c[k].join(" ");f.currentTime=a;f.progress=a/f.duration*100}function e(a){if(f[a])f[a](f)}function g(){f.remaining&&!0!==f.remaining&&f.remaining--}function h(a){var h=f.duration,
+l=f.offset,n=f.delay,P=f.currentTime,q=f.reversed,r=d(a),r=Math.min(Math.max(r,0),h);if(f.children){var p=f.children;if(r>=f.currentTime)for(var u=0;u<p.length;u++)p[u].seek(r);else for(u=p.length;u--;)p[u].seek(r)}r>l&&r<h?(c(r),!f.began&&r>=n&&(f.began=!0,e("begin")),e("run")):(r<=l&&0!==P&&(c(0),q&&g()),r>=h&&P!==h&&(c(h),q||g()));a>=h&&(f.remaining?(t=m,"alternate"===f.direction&&(f.reversed=!f.reversed)):(f.pause(),"Promise"in window&&(Q(),R=b()),f.completed||(f.completed=!0,e("complete"))),
+k=0);e("update")}a=void 0===a?{}:a;var m,t,k=0,Q=null,R=b(),f=fa(a);f.reset=function(){var a=f.direction,b=f.loop;f.currentTime=0;f.progress=0;f.paused=!0;f.began=!1;f.completed=!1;f.reversed="reverse"===a;f.remaining="alternate"===a&&1===b?2:b;for(a=f.children.length;a--;)b=f.children[a],b.seek(b.offset),b.reset()};f.tick=function(a){m=a;t||(t=m);h((k+m-t)*n.speed)};f.seek=function(a){h(d(a))};f.pause=function(){var a=q.indexOf(f);-1<a&&q.splice(a,1);f.paused=!0};f.play=function(){f.paused&&(f.paused=
+!1,t=0,k=d(f.currentTime),q.push(f),z||ja())};f.reverse=function(){f.reversed=!f.reversed;t=0;k=d(f.currentTime)};f.restart=function(){f.pause();f.reset();f.play()};f.finished=R;f.reset();f.autoplay&&f.play();return f}var ga={update:void 0,begin:void 0,run:void 0,complete:void 0,loop:1,direction:"normal",autoplay:!0,offset:0},ha={duration:1E3,delay:0,easing:"easeOutElastic",elasticity:500,round:0},V="translateX translateY translateZ rotate rotateX rotateY rotateZ scale scaleX scaleY scaleZ skewX skewY".split(" "),
+E,g={arr:function(a){return Array.isArray(a)},obj:function(a){return-1<Object.prototype.toString.call(a).indexOf("Object")},svg:function(a){return a instanceof SVGElement},dom:function(a){return a.nodeType||g.svg(a)},str:function(a){return"string"===typeof a},fnc:function(a){return"function"===typeof a},und:function(a){return"undefined"===typeof a},hex:function(a){return/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(a)},rgb:function(a){return/^rgb/.test(a)},hsl:function(a){return/^hsl/.test(a)},col:function(a){return g.hex(a)||
+g.rgb(a)||g.hsl(a)}},y=function(){function a(a,d,c){return(((1-3*c+3*d)*a+(3*c-6*d))*a+3*d)*a}return function(b,d,c,e){if(0<=b&&1>=b&&0<=c&&1>=c){var g=new Float32Array(11);if(b!==d||c!==e)for(var h=0;11>h;++h)g[h]=a(.1*h,b,c);return function(h){if(b===d&&c===e)return h;if(0===h)return 0;if(1===h)return 1;for(var m=0,k=1;10!==k&&g[k]<=h;++k)m+=.1;--k;var k=m+(h-g[k])/(g[k+1]-g[k])*.1,l=3*(1-3*c+3*b)*k*k+2*(3*c-6*b)*k+3*b;if(.001<=l){for(m=0;4>m;++m){l=3*(1-3*c+3*b)*k*k+2*(3*c-6*b)*k+3*b;if(0===l)break;
+var n=a(k,b,c)-h,k=k-n/l}h=k}else if(0===l)h=k;else{var k=m,m=m+.1,f=0;do n=k+(m-k)/2,l=a(n,b,c)-h,0<l?m=n:k=n;while(1e-7<Math.abs(l)&&10>++f);h=n}return a(h,d,e)}}}}(),N=function(){function a(a,b){return 0===a||1===a?a:-Math.pow(2,10*(a-1))*Math.sin(2*(a-1-b/(2*Math.PI)*Math.asin(1))*Math.PI/b)}var b="Quad Cubic Quart Quint Sine Expo Circ Back Elastic".split(" "),d={In:[[.55,.085,.68,.53],[.55,.055,.675,.19],[.895,.03,.685,.22],[.755,.05,.855,.06],[.47,0,.745,.715],[.95,.05,.795,.035],[.6,.04,.98,
+.335],[.6,-.28,.735,.045],a],Out:[[.25,.46,.45,.94],[.215,.61,.355,1],[.165,.84,.44,1],[.23,1,.32,1],[.39,.575,.565,1],[.19,1,.22,1],[.075,.82,.165,1],[.175,.885,.32,1.275],function(b,c){return 1-a(1-b,c)}],InOut:[[.455,.03,.515,.955],[.645,.045,.355,1],[.77,0,.175,1],[.86,0,.07,1],[.445,.05,.55,.95],[1,0,0,1],[.785,.135,.15,.86],[.68,-.55,.265,1.55],function(b,c){return.5>b?a(2*b,c)/2:1-a(-2*b+2,c)/2}]},c={linear:y(.25,.25,.75,.75)},e={},l;for(l in d)e.type=l,d[e.type].forEach(function(a){return function(d,
+e){c["ease"+a.type+b[e]]=g.fnc(d)?d:y.apply($jscomp$this,d)}}(e)),e={type:e.type};return c}(),ia={css:function(a,b,d){return a.style[b]=d},attribute:function(a,b,d){return a.setAttribute(b,d)},object:function(a,b,d){return a[b]=d},transform:function(a,b,d,c,e){c[e]||(c[e]=[]);c[e].push(b+"("+d+")")}},q=[],z=0,ja=function(){function a(){z=requestAnimationFrame(b)}function b(b){var c=q.length;if(c){for(var d=0;d<c;)q[d]&&q[d].tick(b),d++;a()}else cancelAnimationFrame(z),z=0}return a}();n.version="2.0.2";
+n.speed=1;n.running=q;n.remove=function(a){a=M(a);for(var b=q.length;b--;)for(var d=q[b],c=d.animations,e=c.length;e--;)F(a,c[e].animatable.target)&&(c.splice(e,1),c.length||d.pause())};n.getValue=J;n.path=function(a,b){var d=g.str(a)?v(a)[0]:a,c=b||100;return function(a){return{el:d,property:a,totalLength:d.getTotalLength()*(c/100)}}};n.setDashoffset=function(a){var b=a.getTotalLength();a.setAttribute("stroke-dasharray",b);return b};n.bezier=y;n.easings=N;n.timeline=function(a){var b=n(a);b.pause();
+b.duration=0;b.add=function(a){b.children.forEach(function(a){a.began=!0;a.completed=!0});w(a).forEach(function(a){var c=b.duration,d=a.offset;a.autoplay=!1;a.offset=g.und(d)?c:K(d,c);b.seek(a.offset);a=n(a);a.duration>c&&(b.duration=a.duration);a.began=!0;b.children.push(a)});b.reset();b.seek(0);b.autoplay&&b.restart();return b};return b};n.random=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};return n});
+
+//== ON SCREEN
+// https://github.com/silvestreh/onScreen
+!function(global,factory){"object"==typeof exports&&"undefined"!=typeof module?module.exports=factory():"function"==typeof define&&define.amd?define(factory):global.OnScreen=factory()}(this,function(){"use strict";function attach(){var container=this.options.container;if(container instanceof HTMLElement){var style=window.getComputedStyle(container);"static"===style.position&&(container.style.position="relative")}container.addEventListener("scroll",this._scroll),window.addEventListener("resize",this._scroll),this._scroll(),this.attached=!0}function inViewport(el){var options=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{tolerance:0};if(!el)throw new Error("You should specify the element you want to test");"string"==typeof el&&(el=document.querySelector(el));var elRect=el.getBoundingClientRect();return elRect.bottom-options.tolerance>0&&elRect.right-options.tolerance>0&&elRect.left+options.tolerance<(window.innerWidth||document.documentElement.clientWidth)&&elRect.top+options.tolerance<(window.innerHeight||document.documentElement.clientHeight)}function inContainer(el){var options=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{tolerance:0,container:""};if(!el)throw new Error("You should specify the element you want to test");if("string"==typeof el&&(el=document.querySelector(el)),"string"==typeof options&&(options={tolerance:0,container:document.querySelector(options)}),"string"==typeof options.container&&(options.container=document.querySelector(options.container)),options instanceof HTMLElement&&(options={tolerance:0,container:options}),!options.container)throw new Error("You should specify a container element");var containerRect=options.container.getBoundingClientRect();return el.offsetTop+el.clientHeight-options.tolerance>options.container.scrollTop&&el.offsetLeft+el.clientWidth-options.tolerance>options.container.scrollLeft&&el.offsetLeft+options.tolerance<containerRect.width+options.container.scrollLeft&&el.offsetTop+options.tolerance<containerRect.height+options.container.scrollTop}function eventHandler(){var trackedElements=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},options=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{tolerance:0},selectors=Object.keys(trackedElements),testVisibility=void 0;selectors.length&&(testVisibility=options.container===window?inViewport:inContainer,selectors.forEach(function(selector){trackedElements[selector].nodes.forEach(function(item){if(testVisibility(item.node,options)?(item.wasVisible=item.isVisible,item.isVisible=!0):(item.wasVisible=item.isVisible,item.isVisible=!1),item.isVisible===!0&&item.wasVisible===!1){if(!trackedElements[selector].enter)return;Object.keys(trackedElements[selector].enter).forEach(function(callback){"function"==typeof trackedElements[selector].enter[callback]&&trackedElements[selector].enter[callback](item.node,"enter")})}if(item.isVisible===!1&&item.wasVisible===!0){if(!trackedElements[selector].leave)return;Object.keys(trackedElements[selector].leave).forEach(function(callback){"function"==typeof trackedElements[selector].leave[callback]&&trackedElements[selector].leave[callback](item.node,"leave")})}})}))}function debouncedScroll(){var _this=this,timeout=void 0;return function(){clearTimeout(timeout),timeout=setTimeout(function(){eventHandler(_this.trackedElements,_this.options)},_this.options.throttle)}}function destroy(){this.options.container.removeEventListener("scroll",this._scroll),window.removeEventListener("resize",this._scroll),this.attached=!1}function off(event,selector,handler){var enterCallbacks=Object.keys(this.trackedElements[selector].enter),leaveCallbacks=Object.keys(this.trackedElements[selector].leave);if({}.hasOwnProperty.call(this.trackedElements,selector))if(handler){if(this.trackedElements[selector][event]){var callbackName="function"==typeof handler?handler.name:handler;delete this.trackedElements[selector][event][callbackName]}}else delete this.trackedElements[selector][event];enterCallbacks.length||leaveCallbacks.length||delete this.trackedElements[selector]}function on(event,selector,callback){var allowed=["enter","leave"];if(!event)throw new Error("No event given. Choose either enter or leave");if(!selector)throw new Error("No selector to track");if(allowed.indexOf(event)<0)throw new Error(event+" event is not supported");({}).hasOwnProperty.call(this.trackedElements,selector)||(this.trackedElements[selector]={}),this.trackedElements[selector].nodes=[];for(var i=0;i<document.querySelectorAll(selector).length;i++){var item={isVisible:!1,wasVisible:!1,node:document.querySelectorAll(selector)[i]};this.trackedElements[selector].nodes.push(item)}"function"==typeof callback&&(this.trackedElements[selector][event]||(this.trackedElements[selector][event]={}),this.trackedElements[selector][event][callback.name||"anonymous"]=callback)}function observeDOM(obj,callback){var MutationObserver=window.MutationObserver||window.WebKitMutationObserver;if(MutationObserver){var obs=new MutationObserver(callback);obs.observe(obj,{childList:!0,subtree:!0})}else obj.addEventListener("DOMNodeInserted",callback,!1),obj.addEventListener("DOMNodeRemoved",callback,!1)}function OnScreen(){var _this=this,options=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{tolerance:0,debounce:100,container:window};this.options={},this.trackedElements={},Object.defineProperties(this.options,{container:{configurable:!1,enumerable:!1,get:function(){var container=void 0;return"string"==typeof options.container?container=document.querySelector(options.container):options.container instanceof HTMLElement&&(container=options.container),container||window},set:function(value){options.container=value}},debounce:{get:function(){return parseInt(options.debounce,10)||100},set:function(value){options.debounce=value}},tolerance:{get:function(){return parseInt(options.tolerance,10)||0},set:function(value){options.tolerance=value}}}),Object.defineProperty(this,"_scroll",{enumerable:!1,configurable:!1,writable:!1,value:this._debouncedScroll.call(this)}),observeDOM(document.querySelector("body"),function(){Object.keys(_this.trackedElements).forEach(function(element){_this.on("enter",element),_this.on("leave",element)})}),this.attach()}return Object.defineProperties(OnScreen.prototype,{_debouncedScroll:{configurable:!1,writable:!1,enumerable:!1,value:debouncedScroll},attach:{configurable:!1,writable:!1,enumerable:!1,value:attach},destroy:{configurable:!1,writable:!1,enumerable:!1,value:destroy},off:{configurable:!1,writable:!1,enumerable:!1,value:off},on:{configurable:!1,writable:!1,enumerable:!1,value:on}}),OnScreen.check=inViewport,OnScreen});
+//# sourceMappingURL=dist/on-screen.umd.min.map
+
+
+$(document).ready(function(){
+	var homepage = $('.t-homepage.has-animations');
+
+	if ( homepage.length ) {
+		var easing = 'easeInOutSine';
+
+		//== HEADER
+		var headerAdvertisingElementsAnimation = anime.timeline({autoplay: false});
+		headerAdvertisingElementsAnimation
+			.add({
+				targets: '.header-advertising',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.header-advertising .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== HEADER
+		var headerElementsAnimation = anime.timeline({autoplay: false});
+		headerElementsAnimation
+			.add({
+				targets: '.header',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.header .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,				
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== NAVIGATION
+		var navigationElementsAnimation = anime.timeline({autoplay: false});
+		navigationElementsAnimation
+			.add({
+				targets: '.navigation',
+				duration: 250,
+				easing: easing,
+				scaleY: [0, 1],
+				transformOrigin: ['100% 100%', '100% 100%'],
+				opacity: {
+					value: [0, 1]
+				}
+			})
+			.add({
+				targets: '.navigation .wrapper > *',
+				duration: 500,
+				easing: easing,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+
+		//== HERO
+		var heroElementsAnimation = anime.timeline({autoplay: false});
+		heroElementsAnimation
+			.add({
+				targets: ['.hero .panel__image'],
+				duration: 500,
+				easing: easing,
+				scale: [1.5, 1],
+				translateZ: 0,
+				opacity: {
+					value: [0, 1]
+				}
+			})
+			.add({
+				targets: '.hero .panel__header',
+				opacity: 1,
+				duration: 250,
+				offset: '-=250',
+				easing: easing,
+				translateY: ['-=20%', 0]
+			})
+			.add({
+				targets: '.hero .panel__body',
+				duration: 250,
+				offset: '-=125',
+				easing: easing,
+				translateY: ['-=20%', 0],
+				opacity: 1
+			});
+
+
+		//== COUNTDOWN
+		var countdownElementsAnimation = anime.timeline({autoplay: false});
+		countdownElementsAnimation
+			.add({
+				targets: '.countdown',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.countdown .wrapper > *',
+				duration: 250,
+				easing: 'linear',
+				elasticity: 0,
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== SECTORS
+		var sectorsElementsAnimation = anime.timeline({autoplay: false});
+		sectorsElementsAnimation
+			.add({
+				targets: '.sectors',
+				duration: 250,
+				easing: easing,
+				scaleY: [0, 1],
+				transformOrigin: ['100% 100%', '100% 100%'],
+				opacity: {
+					value: [0, 1]
+				}
+			})
+			.add({
+				targets: '.sectors > *',
+				duration: 500,
+				offset: '-=250',
+				easing: easing,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		      	}
+		    });
+
+		//== STATS
+		var statsElementsAnimation = anime.timeline({autoplay: false});
+		statsElementsAnimation
+			.add({
+				targets: '.stats',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.stats .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== ADVERTISING
+		var advertisingElementsAnimation = anime.timeline({autoplay: false});
+		advertisingElementsAnimation
+			.add({
+				targets: '.advertising',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.advertising .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== SPONSORS
+		var sponsorsElementsAnimation = anime.timeline({autoplay: false});
+		sponsorsElementsAnimation
+			.add({
+				targets: '.sponsors',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.sponsors .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== TESTIMONIALS
+		var testimonialsElementsAnimation = anime.timeline({autoplay: false});
+		testimonialsElementsAnimation
+			.add({
+				targets: '.testimonials',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.testimonials .wrapper > *',
+				duration: 250,
+				easing: 'linear',
+				elasticity: 0,
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== NEWSLETTER
+		var newsletterElementsAnimation = anime.timeline({autoplay: false});
+		newsletterElementsAnimation
+			.add({
+				targets: '.newsletter',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.newsletter .wrapper > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		//== FOOTER
+		var footerElementsAnimation = anime.timeline({autoplay: false});
+		footerElementsAnimation
+			.add({
+				targets: '.footer',
+				easing: 'linear',
+				opacity: {
+					value: 1,
+					duration: 250
+				}
+			})
+			.add({
+				targets: '.footer > *',
+				duration: 250,
+				easing: easing,
+				elasticity: 0,
+				translateY: ['-=20%', 0],
+				opacity: 1,
+				delay: function(element, i) {
+		      		return i * 125;
+		    	}
+			});
+
+		$(window).load(function(){
+			var onScreenAnimations = new OnScreen({ tolerance: 0 });
+
+			onScreenAnimations.on('enter', '.header-advertising', function (element) {
+		        headerAdvertisingElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.header', function (element) {
+		        headerElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.navigation', function (element) {
+		        navigationElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.hero', function (element) {
+		        heroElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.section', function (element) {
+				if ( ! $(element).hasClass('has-animation') ) {
+					var articles = element.querySelectorAll('.section__body__article');
+					anime({
+						targets: articles,
+						duration: 500,
+						easing: easing,
+						opacity: [0, 1],
+						translateY: ['-=20%', 0],
+						delay: function(element, i) {
+							return i * 125;
+						}
+					});
+				}
+
+				$(element).addClass('has-animation');
+		    });
+
+			onScreenAnimations.on('enter', '.countdown', function (element) {
+		        countdownElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.sectors', function (element) {
+		        sectorsElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.stats', function (element) {
+		        statsElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.advertising', function (element) {
+		        advertisingElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.sponsors', function (element) {
+		        sponsorsElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.testimonials', function (element) {
+		        testimonialsElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.newsletter', function (element) {
+		        newsletterElementsAnimation.play();
+		    });
+
+			onScreenAnimations.on('enter', '.footer', function (element) {
+		        footerElementsAnimation.play();
+		    });
+		});
+	}
+});
+
+/*!
+Waypoints - 4.0.1
+Copyright © 2011-2016 Caleb Troughton
+Licensed under the MIT license.
+https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
+*/
+!function(){"use strict";function t(o){if(!o)throw new Error("No options passed to Waypoint constructor");if(!o.element)throw new Error("No element option passed to Waypoint constructor");if(!o.handler)throw new Error("No handler option passed to Waypoint constructor");this.key="waypoint-"+e,this.options=t.Adapter.extend({},t.defaults,o),this.element=this.options.element,this.adapter=new t.Adapter(this.element),this.callback=o.handler,this.axis=this.options.horizontal?"horizontal":"vertical",this.enabled=this.options.enabled,this.triggerPoint=null,this.group=t.Group.findOrCreate({name:this.options.group,axis:this.axis}),this.context=t.Context.findOrCreateByElement(this.options.context),t.offsetAliases[this.options.offset]&&(this.options.offset=t.offsetAliases[this.options.offset]),this.group.add(this),this.context.add(this),i[this.key]=this,e+=1}var e=0,i={};t.prototype.queueTrigger=function(t){this.group.queueTrigger(this,t)},t.prototype.trigger=function(t){this.enabled&&this.callback&&this.callback.apply(this,t)},t.prototype.destroy=function(){this.context.remove(this),this.group.remove(this),delete i[this.key]},t.prototype.disable=function(){return this.enabled=!1,this},t.prototype.enable=function(){return this.context.refresh(),this.enabled=!0,this},t.prototype.next=function(){return this.group.next(this)},t.prototype.previous=function(){return this.group.previous(this)},t.invokeAll=function(t){var e=[];for(var o in i)e.push(i[o]);for(var n=0,r=e.length;r>n;n++)e[n][t]()},t.destroyAll=function(){t.invokeAll("destroy")},t.disableAll=function(){t.invokeAll("disable")},t.enableAll=function(){t.Context.refreshAll();for(var e in i)i[e].enabled=!0;return this},t.refreshAll=function(){t.Context.refreshAll()},t.viewportHeight=function(){return window.innerHeight||document.documentElement.clientHeight},t.viewportWidth=function(){return document.documentElement.clientWidth},t.adapters=[],t.defaults={context:window,continuous:!0,enabled:!0,group:"default",horizontal:!1,offset:0},t.offsetAliases={"bottom-in-view":function(){return this.context.innerHeight()-this.adapter.outerHeight()},"right-in-view":function(){return this.context.innerWidth()-this.adapter.outerWidth()}},window.Waypoint=t}(),function(){"use strict";function t(t){window.setTimeout(t,1e3/60)}function e(t){this.element=t,this.Adapter=n.Adapter,this.adapter=new this.Adapter(t),this.key="waypoint-context-"+i,this.didScroll=!1,this.didResize=!1,this.oldScroll={x:this.adapter.scrollLeft(),y:this.adapter.scrollTop()},this.waypoints={vertical:{},horizontal:{}},t.waypointContextKey=this.key,o[t.waypointContextKey]=this,i+=1,n.windowContext||(n.windowContext=!0,n.windowContext=new e(window)),this.createThrottledScrollHandler(),this.createThrottledResizeHandler()}var i=0,o={},n=window.Waypoint,r=window.onload;e.prototype.add=function(t){var e=t.options.horizontal?"horizontal":"vertical";this.waypoints[e][t.key]=t,this.refresh()},e.prototype.checkEmpty=function(){var t=this.Adapter.isEmptyObject(this.waypoints.horizontal),e=this.Adapter.isEmptyObject(this.waypoints.vertical),i=this.element==this.element.window;t&&e&&!i&&(this.adapter.off(".waypoints"),delete o[this.key])},e.prototype.createThrottledResizeHandler=function(){function t(){e.handleResize(),e.didResize=!1}var e=this;this.adapter.on("resize.waypoints",function(){e.didResize||(e.didResize=!0,n.requestAnimationFrame(t))})},e.prototype.createThrottledScrollHandler=function(){function t(){e.handleScroll(),e.didScroll=!1}var e=this;this.adapter.on("scroll.waypoints",function(){(!e.didScroll||n.isTouch)&&(e.didScroll=!0,n.requestAnimationFrame(t))})},e.prototype.handleResize=function(){n.Context.refreshAll()},e.prototype.handleScroll=function(){var t={},e={horizontal:{newScroll:this.adapter.scrollLeft(),oldScroll:this.oldScroll.x,forward:"right",backward:"left"},vertical:{newScroll:this.adapter.scrollTop(),oldScroll:this.oldScroll.y,forward:"down",backward:"up"}};for(var i in e){var o=e[i],n=o.newScroll>o.oldScroll,r=n?o.forward:o.backward;for(var s in this.waypoints[i]){var a=this.waypoints[i][s];if(null!==a.triggerPoint){var l=o.oldScroll<a.triggerPoint,h=o.newScroll>=a.triggerPoint,p=l&&h,u=!l&&!h;(p||u)&&(a.queueTrigger(r),t[a.group.id]=a.group)}}}for(var c in t)t[c].flushTriggers();this.oldScroll={x:e.horizontal.newScroll,y:e.vertical.newScroll}},e.prototype.innerHeight=function(){return this.element==this.element.window?n.viewportHeight():this.adapter.innerHeight()},e.prototype.remove=function(t){delete this.waypoints[t.axis][t.key],this.checkEmpty()},e.prototype.innerWidth=function(){return this.element==this.element.window?n.viewportWidth():this.adapter.innerWidth()},e.prototype.destroy=function(){var t=[];for(var e in this.waypoints)for(var i in this.waypoints[e])t.push(this.waypoints[e][i]);for(var o=0,n=t.length;n>o;o++)t[o].destroy()},e.prototype.refresh=function(){var t,e=this.element==this.element.window,i=e?void 0:this.adapter.offset(),o={};this.handleScroll(),t={horizontal:{contextOffset:e?0:i.left,contextScroll:e?0:this.oldScroll.x,contextDimension:this.innerWidth(),oldScroll:this.oldScroll.x,forward:"right",backward:"left",offsetProp:"left"},vertical:{contextOffset:e?0:i.top,contextScroll:e?0:this.oldScroll.y,contextDimension:this.innerHeight(),oldScroll:this.oldScroll.y,forward:"down",backward:"up",offsetProp:"top"}};for(var r in t){var s=t[r];for(var a in this.waypoints[r]){var l,h,p,u,c,d=this.waypoints[r][a],f=d.options.offset,w=d.triggerPoint,y=0,g=null==w;d.element!==d.element.window&&(y=d.adapter.offset()[s.offsetProp]),"function"==typeof f?f=f.apply(d):"string"==typeof f&&(f=parseFloat(f),d.options.offset.indexOf("%")>-1&&(f=Math.ceil(s.contextDimension*f/100))),l=s.contextScroll-s.contextOffset,d.triggerPoint=Math.floor(y+l-f),h=w<s.oldScroll,p=d.triggerPoint>=s.oldScroll,u=h&&p,c=!h&&!p,!g&&u?(d.queueTrigger(s.backward),o[d.group.id]=d.group):!g&&c?(d.queueTrigger(s.forward),o[d.group.id]=d.group):g&&s.oldScroll>=d.triggerPoint&&(d.queueTrigger(s.forward),o[d.group.id]=d.group)}}return n.requestAnimationFrame(function(){for(var t in o)o[t].flushTriggers()}),this},e.findOrCreateByElement=function(t){return e.findByElement(t)||new e(t)},e.refreshAll=function(){for(var t in o)o[t].refresh()},e.findByElement=function(t){return o[t.waypointContextKey]},window.onload=function(){r&&r(),e.refreshAll()},n.requestAnimationFrame=function(e){var i=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||t;i.call(window,e)},n.Context=e}(),function(){"use strict";function t(t,e){return t.triggerPoint-e.triggerPoint}function e(t,e){return e.triggerPoint-t.triggerPoint}function i(t){this.name=t.name,this.axis=t.axis,this.id=this.name+"-"+this.axis,this.waypoints=[],this.clearTriggerQueues(),o[this.axis][this.name]=this}var o={vertical:{},horizontal:{}},n=window.Waypoint;i.prototype.add=function(t){this.waypoints.push(t)},i.prototype.clearTriggerQueues=function(){this.triggerQueues={up:[],down:[],left:[],right:[]}},i.prototype.flushTriggers=function(){for(var i in this.triggerQueues){var o=this.triggerQueues[i],n="up"===i||"left"===i;o.sort(n?e:t);for(var r=0,s=o.length;s>r;r+=1){var a=o[r];(a.options.continuous||r===o.length-1)&&a.trigger([i])}}this.clearTriggerQueues()},i.prototype.next=function(e){this.waypoints.sort(t);var i=n.Adapter.inArray(e,this.waypoints),o=i===this.waypoints.length-1;return o?null:this.waypoints[i+1]},i.prototype.previous=function(e){this.waypoints.sort(t);var i=n.Adapter.inArray(e,this.waypoints);return i?this.waypoints[i-1]:null},i.prototype.queueTrigger=function(t,e){this.triggerQueues[e].push(t)},i.prototype.remove=function(t){var e=n.Adapter.inArray(t,this.waypoints);e>-1&&this.waypoints.splice(e,1)},i.prototype.first=function(){return this.waypoints[0]},i.prototype.last=function(){return this.waypoints[this.waypoints.length-1]},i.findOrCreate=function(t){return o[t.axis][t.name]||new i(t)},n.Group=i}(),function(){"use strict";function t(t){this.$element=e(t)}var e=window.jQuery,i=window.Waypoint;e.each(["innerHeight","innerWidth","off","offset","on","outerHeight","outerWidth","scrollLeft","scrollTop"],function(e,i){t.prototype[i]=function(){var t=Array.prototype.slice.call(arguments);return this.$element[i].apply(this.$element,t)}}),e.each(["extend","inArray","isEmptyObject"],function(i,o){t[o]=e[o]}),i.adapters.push({name:"jquery",Adapter:t}),i.Adapter=t}(),function(){"use strict";function t(t){return function(){var i=[],o=arguments[0];return t.isFunction(arguments[0])&&(o=t.extend({},arguments[1]),o.handler=arguments[0]),this.each(function(){var n=t.extend({},o,{element:this});"string"==typeof n.context&&(n.context=t(this).closest(n.context)[0]),i.push(new e(n))}),i}}var e=window.Waypoint;window.jQuery&&(window.jQuery.fn.waypoint=t(window.jQuery)),window.Zepto&&(window.Zepto.fn.waypoint=t(window.Zepto))}();
+
+
+// 
+///*!
+//* Counter-Up2 - counterup2-1.0.1.min.js
+//* Counter-Up2 is a lightweight module that counts up to a targeted number when the number becomes visible
+//* 
+//* Copyright 2019, Benjamin Intal https://github.com/bfintal/Counter-Up2/blob/master/LICENSE
+//* Released under the MIT License
+//*
+//* Date: Jan 3, 2019
+!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.counterUp=e():t.counterUp=e()}(window,function(){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=0)}([function(t,e,n){"use strict";n.r(e),n.d(e,"divideNumbers",function(){return o}),n.d(e,"hasComma",function(){return i}),n.d(e,"isFloat",function(){return u}),n.d(e,"decimalPlaces",function(){return l});e.default=function(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.action,i=void 0===n?"start":n,u=e.duration,l=void 0===u?1e3:u,a=e.delay,c=void 0===a?16:a,d=e.lang,f=void 0===d?void 0:d;if("stop"!==i){if(r(t),/[0-9]/.test(t.innerHTML)){var s=o(t.innerHTML,{duration:l||t.getAttribute("data-duration"),lang:f||document.querySelector("html").getAttribute("lang")||void 0,delay:c||t.getAttribute("data-delay")});t._countUpOrigInnerHTML=t.innerHTML,t.innerHTML=s[0],t.style.visibility="visible",t.countUpTimeout=setTimeout(function e(){t.innerHTML=s.shift(),s.length?(clearTimeout(t.countUpTimeout),t.countUpTimeout=setTimeout(e,c)):t._countUpOrigInnerHTML=void 0},c)}}else r(t)};var r=function(t){clearTimeout(t.countUpTimeout),t._countUpOrigInnerHTML&&(t.innerHTML=t._countUpOrigInnerHTML,t._countUpOrigInnerHTML=void 0),t.style.visibility=""},o=function(t){for(var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.duration,r=void 0===n?1e3:n,o=e.delay,i=void 0===o?16:o,u=e.lang,l=void 0===u?void 0:u,a=r/i,c=t.toString().split(/(<[^>]+>|[0-9.][,.0-9]*[0-9]*)/),d=[],f=0;f<a;f++)d.push("");for(var s=0;s<c.length;s++)if(/([0-9.][,.0-9]*[0-9]*)/.test(c[s])&&!/<[^>]+>/.test(c[s])){var p=c[s],v=/[0-9]+,[0-9]+/.test(p);p=p.replace(/,/g,"");for(var g=/^[0-9]+\.[0-9]+$/.test(p),y=g?(p.split(".")[1]||[]).length:0,b=d.length-1,m=a;m>=1;m--){var T=parseInt(p/a*m,10);g&&(T=parseFloat(p/a*m).toFixed(y),T=parseFloat(T).toLocaleString(l)),v&&(T=T.toLocaleString(l)),d[b--]+=T}}else for(var M=0;M<a;M++)d[M]+=c[s];return d[d.length]=t.toString(),d},i=function(t){return/[0-9]+,[0-9]+/.test(t)},u=function(t){return/^[0-9]+\.[0-9]+$/.test(t)},l=function(t){return u(t)?(t.split(".")[1]||[]).length:0}}])});
+
+
+ $( document ).ready( function() {
+	 
+	 //== ANIMATED STATS
+	
+	jQuery(function ($) {
+    	"use strict";
+    
+    	var counterUp = window.counterUp["default"]; // import counterUp from "counterup2"
+    
+    	var $counters = $(".counter");
+    
+    	/* Start counting, do this on DOM ready or with Waypoints. */
+		$counters.each(function (ignore, counter) {
+			var waypoint = new Waypoint( {
+				element: $(this),
+				handler: function() { 
+					counterUp(counter, {
+						duration: 1000,
+						delay: 20
+					}); 
+					this.destroy();
+					console.log('test');
+				},
+				offset: 'bottom-in-view',
+			} );
+		});
+
+	});
+ });
+
+
+
+
