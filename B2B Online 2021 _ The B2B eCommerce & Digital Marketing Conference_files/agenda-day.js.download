@@ -1,0 +1,76 @@
+(function($){
+	$(function(){
+		$('#expandall, #collapseall').attr("style", "display: block !important;");
+		
+	    wrapAgendaDays();
+
+	    $('#Agenda .details').hide();
+	    $('#collapseall').hide();
+
+	    $('#expandall').click(function (e) {
+	        $('#Agenda .withContent').slideDown('fast');
+			$('#Agenda .withContent').prev().addClass("expanded");
+	        $(this).hide();
+	        $('#collapseall').attr("style", "display: block !important;");
+	        e.preventDefault();
+	    });
+
+	    $('#collapseall').click(function (e) {
+	        $('#Agenda .withContent').slideUp('fast');
+			$('#Agenda .withContent').prev().removeClass("expanded");
+	        $(this).hide();
+	        $('#expandall').attr("style", "display: block !important;");
+	        e.preventDefault();
+	    });
+
+	    $('#Agenda .title').click(function () {
+	        $(this).next().slideToggle('fast');
+	    });
+
+	    $('.details').each(function () {
+	        var details = $(this);
+	        if (details != null) {
+	            var descMatches = details.find('.details-description').html().match(/\w/);
+				var speakerMatches = details.find('.speakers-ag span').html().match(/\w/);
+			
+	            if (descMatches != null || speakerMatches != null) {
+	                details.addClass('withContent');
+	                $(this).prev().addClass('expbutton');
+	            } else {
+					details.parent().addClass("noContent");
+				}
+	        }
+	    });
+	
+		$(".Session, .tracks-table td, .track-session").delegate(".titlewrapper", "click", function(e){
+			DisplayContent($(this).parent());
+			
+			if($.browser.msie){
+				$(this).parent().find("a").click(function(){
+					window.location = $(this).attr("href");
+				});
+			}
+			
+			e.preventDefault();
+		});
+	});
+
+	function DisplayContent(item){
+		var details = item.find(".withContent");
+
+	    if (details.css('display') == 'block') {
+	        details.slideUp('fast');
+			details.prev().removeClass("expanded");
+	    }
+	    else if (details.css('display') == 'none') {
+			details.slideDown('fast');
+			details.prev().addClass("expanded");
+	    }
+	}
+
+	function wrapAgendaDays() {
+		$('.Session').each(function(){
+			$(this).wrap('<div class="sessionWrapperA" />');
+		});
+	}
+})(jQuery);
